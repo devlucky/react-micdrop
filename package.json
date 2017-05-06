@@ -1,0 +1,26 @@
+{
+  "name": "react-audio-vis",
+  "version": "0.1.0",
+  "types": "./dist/src/index.d.ts",
+  "private": true,
+  "dependencies": {
+    "@types/jest": "^19.2.3",
+    "@types/node": "^7.0.18",
+    "@types/react": "^15.0.24",
+    "@types/react-dom": "^15.5.0",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4"
+  },
+  "devDependencies": {
+    "@kadira/storybook": "^2.21.0",
+    "react-scripts-ts": "1.3.0",
+    "styled-components": "^1.4.6",
+    "typescript": "^2.3.2"
+  },
+  "scripts": {
+    "build": "./node_modules/.bin/tsc",
+    "test": "react-scripts-ts test --env=jsdom",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
+  }
+}
