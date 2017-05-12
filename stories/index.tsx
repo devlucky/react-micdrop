@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { storiesOf } from '@kadira/storybook';
-import { AudioBars } from '../src';
+
+import { StoryContainer } from './helpers/container';
 
 storiesOf('AudioBars', module)
-  .add('with text', () => {
-    return <AudioBars />;
+  .add('default', () => {
+    return <StoryContainer />;
   });
