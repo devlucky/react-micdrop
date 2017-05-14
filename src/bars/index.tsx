@@ -1,6 +1,8 @@
 import * as React from 'react';
 import {Component} from 'react';
 import {BarsCanvas} from './styled';
+import chunk = require('lodash.chunk');
+import sum = require('lodash.sum');
 
 export interface Dimensions {
   width: number;
@@ -94,17 +96,23 @@ export class AudioBars extends Component<AudioBarsProps, {}> {
     // clear the canvas
     this.canvasContext.clearRect(0, 0, canvasWidth, canvasHeight);
 
-    // TODO allow user to specify a max number of bars
-    const numBarsToDraw = dataArray.length;
     this.analyser.getByteFrequencyData(dataArray);
+
+    const numBarsToDraw = Math.min(dataArray.length, 64);
+    const bufferLength = dataArray.length;
+
+    // chunk values if too many to display
+    const numValuesPerChunk = Math.ceil(bufferLength / numBarsToDraw);
+    const chunkedData = chunk(dataArray, numValuesPerChunk);
+    const barValues = chunkedData.map((arr: Array<number>) => sum(arr) / arr.length);
 
     const barWidth = canvasWidth / numBarsToDraw;
 
     // draw the bars
-    for (let i = 0; i < numBarsToDraw; i++) {
+    for (let i = 0; i < barValues.length; i++) {
       const x = i * barWidth + i;
 
-      const percentBarHeight = dataArray[i] / this.analyser.fftSize;
+      const percentBarHeight = barValues[i] / this.analyser.fftSize;
       const barHeight = canvasHeight * percentBarHeight;
 
       const red = Math.round(87 + (169 * percentBarHeight));

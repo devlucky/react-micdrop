@@ -5,9 +5,13 @@
   "private": true,
   "dependencies": {
     "@types/jest": "^19.2.3",
+    "@types/lodash.chunk": "^4.2.2",
+    "@types/lodash.sum": "^4.0.2",
     "@types/node": "^7.0.18",
     "@types/react": "^15.0.24",
     "@types/react-dom": "^15.5.0",
+    "lodash.chunk": "^4.2.0",
+    "lodash.sum": "^4.0.2",
     "react": "^15.5.4",
     "react-dom": "^15.5.4"
   },
