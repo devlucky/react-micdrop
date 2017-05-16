@@ -5,7 +5,7 @@ import { StoryContainer } from './helpers/container';
 
 const audioContext = new AudioContext();
 
-storiesOf('AudioBars', module)
+storiesOf('Audio', module)
   .add('default', () => {
     return <StoryContainer audioContext={audioContext} />;
   });

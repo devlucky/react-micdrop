@@ -1,32 +1,40 @@
 import * as React from 'react';
 import { Component } from 'react';
 
-import { Wrapper, Audio } from './styled';
-import { AudioBars } from '../../../src';
+import { Analyser, AudioBars, AudioCircle } from '../../../src';
+import { Wrapper, VisualisationsContainer, Visualisation, Audio } from './styled';
 
 export interface StoryContainerProps {
   audioContext: AudioContext;
 }
 
 export interface StoryContainerState {
-  audioEl?: HTMLAudioElement;
+  analyser?: Analyser;
 }
 
 export class StoryContainer extends Component<StoryContainerProps, StoryContainerState> {
   constructor(props: StoryContainerProps) {
     super(props);
-    this.state = {audioEl: undefined};
+    this.state = {analyser: undefined};
   }
 
   render() {
-    const {audioContext} = this.props;
-    const {audioEl} = this.state;
+    const {analyser} = this.state;
 
-    const audioBars = audioEl ? (
-      <AudioBars 
-        audioEl={audioEl}
-        audioContext={audioContext}
-      />
+    const audioBars = analyser ? (
+      <div style={{marginRight: '20px'}}> 
+        <AudioBars 
+          analyser={analyser}
+        />
+      </div>
+    ) : null;
+
+    const audioCircle = analyser ? (
+      <div> 
+        <AudioCircle 
+          analyser={analyser}
+        />
+      </div>
     ) : null;
 
     return (
@@ -37,16 +45,27 @@ export class StoryContainer extends Component<StoryContainerProps, StoryContaine
           controls={true}
           innerRef={this.getAudioElement} 
         />
-        {audioBars}
+        <VisualisationsContainer>
+          <Visualisation>
+            <h2>AudioBars</h2>
+            {audioBars}
+          </Visualisation>
+          <Visualisation>
+            <h2>AudioCircle</h2>
+            {audioCircle}
+          </Visualisation>
+        </VisualisationsContainer>
       </Wrapper>
     );
   }
 
-  private getAudioElement = (ref: HTMLAudioElement) => {
-    if (!ref) {
+  private getAudioElement = (audioEl: HTMLAudioElement) => {
+    const {audioContext} = this.props;
+
+    if (!audioEl) {
       return;
     }
 
-    this.setState({audioEl: ref});
+    this.setState({analyser: new Analyser({audioEl, audioContext})});
   }
 }
