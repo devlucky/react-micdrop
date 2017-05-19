@@ -9,6 +9,9 @@
 # production
 /build
 
+# static assets
+/stories/assets
+
 # misc
 .DS_Store
 .env

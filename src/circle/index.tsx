@@ -5,14 +5,15 @@ import sum = require('lodash.sum');
 
 import {Analyser} from '../analyser';
 import {Dimensions} from '../utils/dimensions';
-import {BarsCanvas} from './styled';
+import {CircleCanvas} from './styled';
 
-export interface AudioBarsProps {
+export interface AudioCircleProps {
   analyser: Analyser;
   dimensions?: Dimensions;
 }
 
-export class AudioBars extends Component<AudioBarsProps, {}> {
+// TODO implement this using a circle visualisation
+export class AudioCircle extends Component<AudioCircleProps, {}> {
   private canvasEl: HTMLCanvasElement;
   private canvasContext: CanvasRenderingContext2D;
   private animationId: number;
@@ -32,7 +33,7 @@ export class AudioBars extends Component<AudioBarsProps, {}> {
 
   render() {
     return (
-      <BarsCanvas 
+      <CircleCanvas 
         width={this.width}
         height={this.height}
         innerRef={this.onCanvasElMountOrUnmount}
@@ -137,5 +138,6 @@ export class AudioBars extends Component<AudioBarsProps, {}> {
     }
 
     return dimensions.height;
+
   }
 }
