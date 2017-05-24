@@ -26,7 +26,7 @@
     "build": "tsc",
     "test": "react-scripts-ts test --env=jsdom",
     "storybook": "start-storybook -p 6006 -s ./stories/assets",
-    "build-storybook": "build-storybook",
+    "build-storybook": "build-storybook -s ./stories/assets",
     "deploy-storybook": "storybook-to-ghpages"
   },
   "storybook-deployer": {

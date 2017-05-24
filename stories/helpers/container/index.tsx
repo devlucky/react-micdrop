@@ -40,7 +40,7 @@ export class StoryContainer extends Component<StoryContainerProps, StoryContaine
     return (
       <Wrapper>
         <Audio 
-          src="./music.mp3" 
+          src="/music.mp3" 
           loop={true}
           controls={true}
           innerRef={this.getAudioElement} 
