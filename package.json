@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "@kadira/storybook": "^2.21.0",
+    "coveralls": "^2.13.1",
     "react-scripts-ts": "^1.4.0",
     "styled-components": "^1.4.6",
     "typescript": "^2.3.2"
@@ -24,6 +25,7 @@
   "scripts": {
     "build": "./node_modules/.bin/tsc",
     "test": "react-scripts-ts test --env=jsdom",
+    "coverage": "yarn run test -- --coverage",
     "storybook": "start-storybook -p 6006 -s ./stories/assets",
     "build-storybook": "build-storybook"
   }
