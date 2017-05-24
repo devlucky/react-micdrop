@@ -3,6 +3,12 @@ export interface AnalyserSpec {
   audioContext: AudioContext;
 }
 
+export interface Analyser {
+  audioEl: HTMLAudioElement;
+  analyserNode: AnalyserNode;
+  closeAudioNodes: () => void;
+}
+
 export class Analyser {
   audioEl: HTMLAudioElement;
   analyserNode: AnalyserNode;
