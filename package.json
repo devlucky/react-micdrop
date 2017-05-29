@@ -17,16 +17,23 @@
   },
   "devDependencies": {
     "@kadira/storybook": "^2.21.0",
+    "@kadira/storybook-deployer": "^1.2.0",
     "coveralls": "^2.13.1",
     "react-scripts-ts": "^1.4.0",
     "styled-components": "^1.4.6",
     "typescript": "^2.3.2"
   },
   "scripts": {
-    "build": "./node_modules/.bin/tsc",
+    "build": "tsc",
     "test": "react-scripts-ts test --env=jsdom",
     "coverage": "yarn run test -- --coverage",
     "storybook": "start-storybook -p 6006 -s ./stories/assets",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook -s ./stories/assets",
+    "deploy-storybook": "storybook-to-ghpages"
+  },
+  "storybook-deployer": {
+    "gitUsername": "GH Pages Bot",
+    "gitEmail": "hello@ghbot.com",
+    "commitMessage": "Deploy Storybook to GitHub Pages [skip ci]"
   }
 }
