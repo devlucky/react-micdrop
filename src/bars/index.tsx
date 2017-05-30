@@ -10,6 +10,7 @@ import {BarsCanvas} from './styled';
 export interface AudioBarsProps {
   analyser: Analyser;
   dimensions?: Dimensions;
+  barWidth?: number;
 }
 
 export class AudioBars extends Component<AudioBarsProps, {}> {
@@ -32,7 +33,7 @@ export class AudioBars extends Component<AudioBarsProps, {}> {
 
   render() {
     return (
-      <BarsCanvas 
+      <BarsCanvas
         width={this.width}
         height={this.height}
         innerRef={this.onCanvasElMountOrUnmount}
@@ -69,16 +70,16 @@ export class AudioBars extends Component<AudioBarsProps, {}> {
   }
 
   private drawBars = (): void => {
-    const {canvasContext, width: canvasWidth, height: canvasHeight, dataArray} = this;
-
+    const {canvasContext, barWidth, numBarsToDraw, dataArray, width: canvasWidth, height: canvasHeight} = this;
+    const {analyser} = this.props;
     // clear the canvas
-    this.canvasContext.clearRect(0, 0, canvasWidth, canvasHeight);
+    // TODO [Perf] we can store the higher bar value XY and only clear the canvas from those points
+    canvasContext.clearRect(0, 0, canvasWidth, canvasHeight);
 
-    const {analyserNode} = this.props.analyser;
+    const {analyserNode} = analyser;
     const maxByteValue = 256;
     analyserNode.getByteFrequencyData(dataArray);
 
-    const numBarsToDraw = Math.min(dataArray.length, 64);
     const bufferLength = dataArray.length;
 
     // chunk values if too many to display
@@ -86,18 +87,18 @@ export class AudioBars extends Component<AudioBarsProps, {}> {
     const chunkedData = chunk(dataArray, numValuesPerChunk);
     const barValues = chunkedData.map((arr: Array<number>) => sum(arr) / arr.length);
 
-    const barWidth = canvasWidth / numBarsToDraw;
-
     // draw the bars
     for (let i = 0; i < barValues.length; i++) {
       const x = i * barWidth + i;
 
+      if (x >= canvasWidth) {break;} // Don't paint bars outside the canvas
+
       const percentBarHeight = barValues[i] / maxByteValue;
       const barHeight = canvasHeight * percentBarHeight;
+      if (barHeight < 1) {continue;} // Don't paint invisible bars
 
       const red = Math.round(87 + (169 * percentBarHeight));
       canvasContext.fillStyle = `rgba(${red}, 175, 229, 1)`; // TODO: Play with alpha channel based on height?
-
       canvasContext.fillRect(x, canvasHeight - barHeight, barWidth, barHeight);
     }
 
@@ -131,11 +132,26 @@ export class AudioBars extends Component<AudioBarsProps, {}> {
     const defaultHeight = 400;
     const {dimensions} = this.props;
 
-
     if (!dimensions || !dimensions.height) {
       return defaultHeight;
     }
 
     return dimensions.height;
+  }
+
+  private get barWidth(): number {
+    const {barWidth} = this.props;
+    if (barWidth) { return barWidth; }
+
+    const {width: canvasWidth, numBarsToDraw} = this;
+
+    return canvasWidth / numBarsToDraw;
+  }
+
+  private get numBarsToDraw(): number {
+    const {width, barWidth, dataArray} = this;
+    const maxBarsToDraw = width / barWidth;
+
+    return Math.min(dataArray.length, maxBarsToDraw);
   }
 }
