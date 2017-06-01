@@ -1,3 +1,6 @@
+import chunk = require('lodash.chunk');
+import sum = require('lodash.sum');
+
 export interface AnalyserSpec {
   audioEl: HTMLAudioElement;
   audioContext: AudioContext;
@@ -13,6 +16,7 @@ export class Analyser {
   audioEl: HTMLAudioElement;
   analyserNode: AnalyserNode;
   private source: MediaElementAudioSourceNode;
+  private dataArray: Uint8Array;
 
   constructor(spec: AnalyserSpec) {
     this.audioEl = spec.audioEl;
@@ -23,6 +27,26 @@ export class Analyser {
     const {analyserNode, source} = this;
     if (analyserNode) { analyserNode.disconnect(); }
     if (source) { source.disconnect(); }
+  }
+
+  getBucketedByteFrequencyData = (maxNumBuckets: number): Array<number> => {
+    const {analyserNode} = this;
+
+    const bufferLength = analyserNode.frequencyBinCount;
+    if (!this.dataArray) {
+      this.dataArray = new Uint8Array(bufferLength);
+    }
+
+    const {dataArray} = this;
+    analyserNode.getByteFrequencyData(dataArray);
+
+    const numBuckets = Math.min(dataArray.length, maxNumBuckets);
+
+    // bucket values
+    const numValuesPerChunk = Math.ceil(bufferLength / numBuckets);
+    const chunkedData = chunk(dataArray, numValuesPerChunk);
+
+    return chunkedData.map((arr: Array<number>) => sum(arr) / arr.length);
   }
 
   private createAnalyserNode = ({audioEl, audioContext}: AnalyserSpec): void => {

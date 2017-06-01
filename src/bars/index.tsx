@@ -1,7 +1,5 @@
 import * as React from 'react';
 import {Component} from 'react';
-import chunk = require('lodash.chunk');
-import sum = require('lodash.sum');
 
 import {Analyser} from '../analyser';
 import {Dimensions} from '../utils/dimensions';
@@ -16,7 +14,6 @@ export class AudioBars extends Component<AudioBarsProps, {}> {
   private canvasEl: HTMLCanvasElement;
   private canvasContext: CanvasRenderingContext2D;
   private animationId: number;
-  private dataArray: Uint8Array;
 
   componentDidMount() {
     const {audioEl} = this.props.analyser;
@@ -60,35 +57,22 @@ export class AudioBars extends Component<AudioBarsProps, {}> {
     }
 
     this.canvasContext = context;
-
-    const {analyserNode} = this.props.analyser;
-    const bufferLength = analyserNode.frequencyBinCount;
-    this.dataArray = new Uint8Array(bufferLength);
-
     this.drawBars();
   }
 
   private drawBars = (): void => {
-    const {canvasContext, width: canvasWidth, height: canvasHeight, dataArray} = this;
+    const {canvasContext, width: canvasWidth, height: canvasHeight} = this;
+    const {analyser} = this.props;
 
     // clear the canvas
     this.canvasContext.clearRect(0, 0, canvasWidth, canvasHeight);
 
-    const {analyserNode} = this.props.analyser;
-    const maxByteValue = 256;
-    analyserNode.getByteFrequencyData(dataArray);
-
-    const numBarsToDraw = Math.min(dataArray.length, 64);
-    const bufferLength = dataArray.length;
-
-    // chunk values if too many to display
-    const numValuesPerChunk = Math.ceil(bufferLength / numBarsToDraw);
-    const chunkedData = chunk(dataArray, numValuesPerChunk);
-    const barValues = chunkedData.map((arr: Array<number>) => sum(arr) / arr.length);
-
-    const barWidth = canvasWidth / numBarsToDraw;
+    const maxNumBarsToDraw = 64;
+    const barValues = analyser.getBucketedByteFrequencyData(maxNumBarsToDraw);
+    const barWidth = canvasWidth / barValues.length;
 
     // draw the bars
+    const maxByteValue = 256;
     for (let i = 0; i < barValues.length; i++) {
       const x = i * barWidth + i;
 

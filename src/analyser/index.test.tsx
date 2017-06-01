@@ -5,9 +5,14 @@ interface MockNode {
   disconnect: Function;
 }
 
+interface MockAnalyserNode extends MockNode {
+  frequencyBinCount: number;
+  getByteFrequencyData: (array: Int8Array) => void;
+}
+
 describe('Analyser', () => {
   let sourceNode: MockNode;
-  let analyserNode: MockNode;
+  let analyserNode: MockAnalyserNode;
   let destinationNode: MockNode;
   let audioContext: AudioContext;
   let audioEl: HTMLAudioElement;
@@ -21,7 +26,9 @@ describe('Analyser', () => {
 
     analyserNode = {
       connect: jest.fn(),
-      disconnect: jest.fn()
+      disconnect: jest.fn(),
+      frequencyBinCount: 10,
+      getByteFrequencyData: () => {} 
     };
 
     destinationNode = {
@@ -75,6 +82,40 @@ describe('Analyser', () => {
       analyser.closeAudioNodes();
       expect(sourceNode.disconnect).toHaveBeenCalledTimes(1);
       expect(analyserNode.disconnect).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('getBucketedByteFrequencyData', () => {
+    const mockAnalyserNodeWithFrequencies = (analyserNodeFrequencies: Array<number>) => {
+      analyserNode.frequencyBinCount = analyserNodeFrequencies.length;
+
+      analyserNode.getByteFrequencyData = jest.fn().mockImplementation(
+        (dataArray) => {
+          for (let i = 0; i < analyserNodeFrequencies.length; i++) {
+            dataArray[i] = analyserNodeFrequencies[i];
+          }
+        }
+      );
+    };
+
+    it('returns the unaltered array when there are more buckets than array entries', () => {
+      const numberOfBuckets = 10;
+      const analyserNodeFrequencies = [1, 2, 3, 4];
+      mockAnalyserNodeWithFrequencies(analyserNodeFrequencies);
+
+      const bucketedArray = analyser.getBucketedByteFrequencyData(numberOfBuckets);
+      expect(bucketedArray).toEqual(analyserNodeFrequencies);
+    });
+
+    it('correctly buckets array when there are less buckets than array entries', () => {
+      const numberOfBuckets = 4;
+      const analyserNodeFrequencies = [1, 2, 3, 4, 5, 6, 7, 8];
+      const expectedBucketArray = [1.5, 3.5, 5.5, 7.5];
+
+      mockAnalyserNodeWithFrequencies(analyserNodeFrequencies);
+
+      const bucketedArray = analyser.getBucketedByteFrequencyData(numberOfBuckets);
+      expect(bucketedArray).toEqual(expectedBucketArray);
     });
   });
 });
