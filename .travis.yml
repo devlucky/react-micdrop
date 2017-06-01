@@ -3,6 +3,35 @@ node_js:
   - 7
 cache:
   yarn: true
+  directories:
+    - node_modules
+
 script:
   - yarn run coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
   - yarn run build
+  - yarn run build-storybook
+
+deploy:
+  skip_cleanup: true
+  provider: s3
+  access_key_id: AKIAJSFHN42NG6SJT7PA
+  secret_access_key:
+    secure: pMV5cVePKBsBnMvSkqgx/HENJ8MZBaZ5KcnsP8ADoJmqK4lhhQorMZrkYgY7stHa2J49iO5do9BzLwrgSOvqcEny91WU/R/Ww2q7BS4t3Rjcuua6T6XT8cbHm0+aKdTfAq3LEPR6uGXatMaFthpRHXrOmenmADADJme59Kswty7zddt4ltlOX/c4XK7c3vbqRUX46tqrldwL1BQMwX3OrzkenSYvg8zDDybZeyIDpGJfSTqwLQUt9xzjvCPyO9eLtfG0eXf4mdBkTGKfyi410rCwUuvHCwV8+fru+UKEBUwFtzoIL5LmON6uxHi2/pUbyNDyN/R9PCpE3eZwhK044YKo+fvLQzB3Y1UbinVXwvnPDSymA18Da5cmkUTS15g4whg8VjLdoDy7JvYwEjVWwHNytFKYHTLaQVU0Rjfnrc4f++aZ6NucVMIvC1Y7WRAbV/ObIifdl+jp9sDzaogB32X/ztHXd/Or2ykKmzyqtzrcwyEKZ2ChGVXiIVqcvyVCQpNJIXfnpWK41n5XAeq+RRROu9DMJbrwWdFIlGsjyvdmEy6e870X3WIPMSJIOfR8PobTdWT0nJDbu8wIzc1OpwVHSvmRa9noyWUpz/ZiVcPlNH1HfN9QrM5PpEo03ub5CTInqYpDu3OOPdcWK1xFfAsrOHhlFEh2FcIfDWRngTY=
+  bucket: react-audio-vis-prs
+  region: ap-southeast-2
+  local_dir: storybook-static/
+  upload-dir: $TRAVIS_PULL_REQUEST_BRANCH
+  on:
+    repo: devlucky/react-audio-vis
+    # not on master branch and storybook-static is less than 10 MB
+    condition: $TRAVIS_PULL_REQUEST_BRANCH != "master" && `du -sk storybook-static | sed 's/[^0-9]*//g'` -lt 10240
+    all_branches: true
+
+after_deploy:
+  # TODO comment on PR with link to PR storybook on S3 and notify slack room
+  - echo "PR storybook can be found at:"
+  - echo "http://react-audio-vis-prs.s3-ap-southeast-2.amazonaws.com/$TRAVIS_PULL_REQUEST_BRANCH/index.html"
+
+after_script:
+  - rm -r storybook-static/
+  - rm -r dist/

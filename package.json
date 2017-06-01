@@ -19,7 +19,9 @@
     "@kadira/storybook": "^2.21.0",
     "@kadira/storybook-deployer": "^1.2.0",
     "coveralls": "^2.13.1",
+    "enzyme": "^2.8.2",
     "react-scripts-ts": "^1.4.0",
+    "react-test-renderer": "^15.5.4",
     "styled-components": "^1.4.6",
     "typescript": "^2.3.2"
   },
