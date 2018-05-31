@@ -3,6 +3,20 @@ node_js:
   - 7
 cache:
   yarn: true
+  directories:
+    - node_modules
+
+before_install:
+  - pip install --user awscli
+  - export PATH=$PATH:$HOME/.local/bin
+
 script:
   - yarn run coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
   - yarn run build
+  - yarn run build-storybook
+  - node ./build/aws-deploy.js
+
+after_script:
+  # TODO comment on PR with link to PR storybook on S3 and notify slack room
+  - echo "PR storybook can be found at:"
+  - echo "http://react-audio-vis-prs.s3-ap-southeast-2.amazonaws.com/$TRAVIS_PULL_REQUEST_BRANCH/index.html"
