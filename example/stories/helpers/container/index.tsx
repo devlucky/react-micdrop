@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Component } from 'react';
 
-import { Analyser, AudioBars, AudioCircle } from '../../../src';
+import { Analyser, AudioBars, AudioCircle } from '../../../../src';
 import { Wrapper, VisualisationsContainer, Visualisation, Audio } from './styled';
 
 export interface StoryContainerProps {
@@ -40,7 +40,7 @@ export class StoryContainer extends Component<StoryContainerProps, StoryContaine
     return (
       <Wrapper>
         <Audio 
-          src="./music.mp3" 
+          src="http://localhost:8080/example/stories/assets/music.mp3" 
           loop={true}
           controls={true}
           innerRef={this.getAudioElement} 

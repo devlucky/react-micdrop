@@ -1,41 +1,42 @@
 {
   "name": "react-audio-vis",
   "version": "0.1.0",
-  "types": "./dist/src/index.d.ts",
-  "private": true,
   "dependencies": {
     "@types/jest": "^19.2.3",
     "@types/lodash.chunk": "^4.2.2",
     "@types/lodash.sum": "^4.0.2",
-    "@types/node": "^7.0.18",
-    "@types/react": "^15.0.24",
-    "@types/react-dom": "^15.5.0",
     "lodash.chunk": "^4.2.0",
-    "lodash.sum": "^4.0.2",
-    "react": "^15.5.4",
-    "react-dom": "^15.5.4"
+    "lodash.sum": "^4.0.2"
   },
   "devDependencies": {
-    "@kadira/storybook": "^2.21.0",
-    "@kadira/storybook-deployer": "^1.2.0",
-    "coveralls": "^2.13.1",
-    "enzyme": "^2.8.2",
-    "react-scripts-ts": "^1.4.0",
-    "react-test-renderer": "^15.5.4",
-    "styled-components": "^1.4.6",
-    "typescript": "^2.3.2"
+    "ts-react-toolbox": "^0.1.15"
+  },
+  "engines": {
+    "node": ">=8.5.0"
   },
   "scripts": {
-    "build": "tsc",
-    "test": "react-scripts-ts test --env=jsdom",
-    "coverage": "yarn run test -- --coverage",
-    "storybook": "start-storybook -p 6006 -s ./stories/assets",
-    "build-storybook": "build-storybook -s ./stories/assets",
-    "deploy-storybook": "storybook-to-ghpages"
+    "bootstrap": "ts-react-toolbox init",
+    "dev": "ts-react-toolbox dev",
+    "test": "ts-react-toolbox test",
+    "test:ci": "ts-react-toolbox test --runInBand --coverage",
+    "build": "ts-react-toolbox build",
+    "release": "ts-react-toolbox release",
+    "lint": "ts-react-toolbox lint",
+    "static": "ts-react-toolbox publish",
+    "format": "ts-react-toolbox format",
+    "analyze": "ts-react-toolbox analyze"
   },
-  "storybook-deployer": {
-    "gitUsername": "GH Pages Bot",
-    "gitEmail": "hello@ghbot.com",
-    "commitMessage": "Deploy Storybook to GitHub Pages [skip ci]"
+  "peerDependencies": {
+    "react": "^16.4.2"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "keywords": [],
+  "repository": "",
+  "resolutions": {
+    "jsdom": "11.11.0"
   }
 }

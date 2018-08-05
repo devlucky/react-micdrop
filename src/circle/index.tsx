@@ -14,10 +14,10 @@ export interface AudioCircleProps {
 
 // TODO implement this using a circle visualisation
 export class AudioCircle extends Component<AudioCircleProps, {}> {
-  private canvasEl: HTMLCanvasElement;
-  private canvasContext: CanvasRenderingContext2D;
-  private animationId: number;
-  private dataArray: Uint8Array;
+  private canvasEl?: HTMLCanvasElement;
+  private canvasContext?: CanvasRenderingContext2D;
+  private animationId?: number;
+  private dataArray?: Uint8Array;
 
   componentDidMount() {
     const {audioEl} = this.props.analyser;
@@ -41,7 +41,7 @@ export class AudioCircle extends Component<AudioCircleProps, {}> {
     );
   }
 
-  private onCanvasElMountOrUnmount = (ref: HTMLCanvasElement): void => {
+  private onCanvasElMountOrUnmount = (ref?: HTMLCanvasElement): void => {
     if (!ref) {
       return;
     }
@@ -54,6 +54,8 @@ export class AudioCircle extends Component<AudioCircleProps, {}> {
   }
 
   private draw = (): void => {
+    if (!this.canvasEl) return;
+
     const context = this.canvasEl.getContext('2d');
 
     if (!context) {
@@ -72,8 +74,10 @@ export class AudioCircle extends Component<AudioCircleProps, {}> {
   private drawBars = (): void => {
     const {canvasContext, width: canvasWidth, height: canvasHeight, dataArray} = this;
 
+    if (!canvasContext || !dataArray) return;
+
     // clear the canvas
-    this.canvasContext.clearRect(0, 0, canvasWidth, canvasHeight);
+    canvasContext.clearRect(0, 0, canvasWidth, canvasHeight);
 
     const {analyserNode} = this.props.analyser;
     const maxByteValue = 256;
@@ -114,7 +118,7 @@ export class AudioCircle extends Component<AudioCircleProps, {}> {
   }
 
   private stopAnimation = () => {
-    cancelAnimationFrame(this.animationId);
+    this.animationId && cancelAnimationFrame(this.animationId);
   }
 
   private get width(): number {

@@ -16,9 +16,12 @@ export class Analyser {
   audioEl: HTMLAudioElement;
   analyserNode: AnalyserNode;
   private source: MediaElementAudioSourceNode;
-  private dataArray: Uint8Array;
+  private dataArray?: Uint8Array;
 
   constructor(spec: AnalyserSpec) {
+    const {audioContext, audioEl} = spec;
+    this.source = audioContext.createMediaElementSource(audioEl);
+    this.analyserNode = audioContext.createAnalyser();
     this.audioEl = spec.audioEl;
     this.createAnalyserNode(spec);
   }
@@ -49,10 +52,7 @@ export class Analyser {
     return chunkedData.map((arr: Array<number>) => sum(arr) / arr.length);
   }
 
-  private createAnalyserNode = ({audioEl, audioContext}: AnalyserSpec): void => {
-    this.source = audioContext.createMediaElementSource(audioEl);
-
-    this.analyserNode = audioContext.createAnalyser();
+  private createAnalyserNode = ({audioContext}: AnalyserSpec): void => {
     const numDataPoints = 512;
     this.analyserNode.fftSize = 2 * numDataPoints;
 

@@ -11,9 +11,9 @@ export interface AudioBarsProps {
 }
 
 export class AudioBars extends Component<AudioBarsProps, {}> {
-  private canvasEl: HTMLCanvasElement;
-  private canvasContext: CanvasRenderingContext2D;
-  private animationId: number;
+  private canvasEl?: HTMLCanvasElement;
+  private canvasContext?: CanvasRenderingContext2D;
+  private animationId?: number;
 
   componentDidMount() {
     const {audioEl} = this.props.analyser;
@@ -37,7 +37,7 @@ export class AudioBars extends Component<AudioBarsProps, {}> {
     );
   }
 
-  private onCanvasElMountOrUnmount = (ref: HTMLCanvasElement): void => {
+  private onCanvasElMountOrUnmount = (ref?: HTMLCanvasElement): void => {
     if (!ref) {
       return;
     }
@@ -50,6 +50,8 @@ export class AudioBars extends Component<AudioBarsProps, {}> {
   }
 
   private draw = (): void => {
+    if (!this.canvasEl) return;
+
     const context = this.canvasEl.getContext('2d');
 
     if (!context) {
@@ -62,10 +64,12 @@ export class AudioBars extends Component<AudioBarsProps, {}> {
 
   private drawBars = (): void => {
     const {canvasContext, width: canvasWidth, height: canvasHeight} = this;
+    if (!canvasContext) return;
+
     const {analyser} = this.props;
 
     // clear the canvas
-    this.canvasContext.clearRect(0, 0, canvasWidth, canvasHeight);
+    canvasContext.clearRect(0, 0, canvasWidth, canvasHeight);
 
     const maxNumBarsToDraw = 64;
     const barValues = analyser.getBucketedByteFrequencyData(maxNumBarsToDraw);
@@ -97,7 +101,7 @@ export class AudioBars extends Component<AudioBarsProps, {}> {
   }
 
   private stopAnimation = () => {
-    cancelAnimationFrame(this.animationId);
+    this.animationId && cancelAnimationFrame(this.animationId);
   }
 
   private get width(): number {

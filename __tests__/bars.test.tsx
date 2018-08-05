@@ -1,16 +1,15 @@
 import * as React from 'react';
 import {shallow} from 'enzyme';
 
-import {AudioBars} from './';
+import {AudioBars} from '../src';
 
 describe('AudioBars', () => {
+  const audioEl = {addEventListener: jest.fn()};
+  const analyser = {audioEl} as any;
+
   describe('componentDidMount', () => {
     it('registers event listeners', () => {
-      const audioEl = {addEventListener: jest.fn()};
-      const analyser = {audioEl} as any;
-
-      const wrapper = shallow(<AudioBars analyser={analyser} />);
-      wrapper.instance().componentDidMount();
+      shallow(<AudioBars analyser={analyser} />);
 
       const {addEventListener} = audioEl;
       expect(addEventListener).toHaveBeenCalledTimes(3);
@@ -22,21 +21,18 @@ describe('AudioBars', () => {
 
   describe('render', () => {
     it('default width passed to BarsCanvas is 400px', () => {
-      const analyser = {} as any;
       const wrapper = shallow(<AudioBars analyser={analyser} />);
 
       expect(wrapper.props().width).toEqual(400);
     });
 
     it('default height passed to BarsCanvas is 400px', () => {
-      const analyser = {} as any;
       const wrapper = shallow(<AudioBars analyser={analyser} />);
 
       expect(wrapper.props().height).toEqual(400);
     });
 
     it('passes dimensions to BarsCanvas', () => {
-      const analyser = {} as any;
       const dims = {width: 200, height: 200};
       const wrapper = shallow(<AudioBars analyser={analyser} dimensions={dims} />);
 
@@ -51,11 +47,15 @@ describe('AudioBars', () => {
     let canvasContext;
 
     beforeEach(() => {
+      const audioEl = {addEventListener: jest.fn()};
+  
       window.requestAnimationFrame = jest.fn();
 
       freqData = [1, 2, 3, 4];
+      
       analyser = {
-        getBucketedByteFrequencyData: jest.fn().mockReturnValue(freqData)
+        getBucketedByteFrequencyData: jest.fn().mockReturnValue(freqData),
+        audioEl
       } as any;
 
       canvasContext = {clearRect: jest.fn(), fillRect: jest.fn()};
