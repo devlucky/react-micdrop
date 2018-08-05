@@ -37,6 +37,8 @@
   "keywords": [],
   "repository": "",
   "resolutions": {
-    "jsdom": "11.11.0"
+    "jsdom": "11.11.0",
+    "typescript": "2.8.1",
+    "styled-components": "3.2.6"
   }
 }
