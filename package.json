@@ -1,6 +1,9 @@
 {
-  "name": "react-audio-vis",
+  "name": "react-micdrop",
   "version": "0.1.0",
+  "description": "Audio visualisation library for React",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "dependencies": {
     "@types/jest": "^19.2.3",
     "@types/lodash.chunk": "^4.2.2",
@@ -29,16 +32,14 @@
   "peerDependencies": {
     "react": "^16.4.2"
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
-  "keywords": [],
-  "repository": "",
   "resolutions": {
     "jsdom": "11.11.0",
     "typescript": "2.8.1",
     "styled-components": "3.2.6"
-  }
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [],
+  "repository": "https://github.com/devlucky/react-micdrop"
 }

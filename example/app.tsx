@@ -7,7 +7,7 @@ import story from './stories';
 export interface AppState {
   
 }
-const repoUrl = 'https://github.com/devlucky/react-audio-vis';
+const repoUrl = 'https://github.com/devlucky/react-micdrop';
 export default class App extends Component <{}, AppState> {
   state: AppState = {
     
