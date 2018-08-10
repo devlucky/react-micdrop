@@ -10,9 +10,10 @@ export interface AppState {
   isPlaying: boolean; 
   barNumber: number;
   dimensions: Dimensions;
+  color?: string;
 }
 
-const src = '/example/assets/music.mp3';
+const src = '/example/music.mp3';
 const repoUrl = 'https://github.com/devlucky/react-micdrop';
 
 export default class App extends Component <{}, AppState> {
@@ -56,8 +57,16 @@ export default class App extends Component <{}, AppState> {
     this.setState({barNumber})
   }
 
+  changeColor = (e: ChangeEvent<HTMLInputElement>) => {
+    const color = e.target.value;
+    
+    this.setState({
+      color
+    });
+  }
+
   render() {
-    const {isPlaying, barNumber, dimensions} = this.state;
+    const {isPlaying, barNumber, dimensions, color} = this.state;
     const toggleButtonText = isPlaying ? 'pause' : 'play';
 
     return (
@@ -69,6 +78,7 @@ export default class App extends Component <{}, AppState> {
             isPlaying={isPlaying}
             barNumber={barNumber}
             dimensions={dimensions}
+            color={color}
           />
         </MicDropWrapper>
         <div>
@@ -77,6 +87,9 @@ export default class App extends Component <{}, AppState> {
           </Button>
           <div>
             Bar number <input type="number" value={barNumber} onChange={this.changeBarNumber} />
+          </div>
+          <div>
+            <input type="color" value={color} onChange={this.changeColor} />
           </div>
           <div>
             Dimensions

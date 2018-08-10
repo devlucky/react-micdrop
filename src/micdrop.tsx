@@ -4,6 +4,7 @@ import { Analyser } from './analyser';
 import { AudioBars } from './bars';
 import { Audio } from './styled';
 import { Dimensions } from './utils/dimensions';
+import { Color } from './domain';
 
 export interface MicDropProps {
   src: string;
@@ -12,6 +13,7 @@ export interface MicDropProps {
   loop?: boolean;
   barNumber?: number;
   dimensions?: Dimensions;
+  color?: Color;
 }
 
 export interface MicDropState {
@@ -71,7 +73,7 @@ export class MicDrop extends Component<MicDropProps, MicDropState> {
 
   renderBars = () => {
     const {analyser} = this.state;
-    const {barNumber, dimensions} = this.props;
+    const {barNumber, dimensions, color} = this.props;
     if (!analyser) return;
 
     return (
@@ -79,6 +81,7 @@ export class MicDrop extends Component<MicDropProps, MicDropState> {
         analyser={analyser}
         barNumber={barNumber}
         dimensions={dimensions}
+        color={color}
       />
     )
   }

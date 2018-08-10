@@ -4,11 +4,13 @@ import {Component} from 'react';
 import {Analyser} from '../analyser';
 import {Dimensions} from '../utils/dimensions';
 import {BarsCanvas} from './styled';
+import { Color } from '../domain';
 
 export interface AudioBarsProps {
   analyser: Analyser;
   dimensions?: Dimensions;
   barNumber?: number;
+  color?: Color;
 }
 
 const maxNumBarsToDraw = 64;
@@ -16,9 +18,9 @@ const maxByteValue = 256;
 const defaultBarNumber = 30;
 
 // TODO: Play with alpha channel based on height?
-const getFillStyle = (height: number): string => {
-  // const red = Math.round(87 + (169 * height));
-  const red = 130;
+const defaultFillStyle = (height: number): string => {
+  const red = Math.round(87 + (169 * height));
+  
   return `rgba(${red}, 175, 229, 1)`;
 }
 
@@ -103,11 +105,23 @@ export class AudioBars extends Component<AudioBarsProps, {}> {
       
       if (barHeight < 1) {continue;} // Don't paint invisible bars
 
-      canvasContext.fillStyle = getFillStyle(percentBarHeight)
+      canvasContext.fillStyle = this.getFillStyle(percentBarHeight)
       canvasContext.fillRect(x, canvasHeight - barHeight, barWidth, barHeight);
     }
 
     this.animationId = requestAnimationFrame(this.drawBars);
+  }
+
+  getFillStyle = (height: number): string => {
+    const {color} = this.props;
+
+    if (typeof color === 'function') {
+      return color(height);
+    } else if (typeof color === 'string') {
+      return color;
+    }
+
+    return defaultFillStyle(height);
   }
 
   private onPause = () => {
