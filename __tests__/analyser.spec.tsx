@@ -1,4 +1,4 @@
-import {Analyser} from '../src';
+import {Analyser} from '../src/analyser';
 
 interface MockNode {
   connect: Function;

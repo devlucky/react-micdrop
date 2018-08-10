@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {shallow} from 'enzyme';
 
-import {AudioBars} from '../src';
+import {AudioBars} from '../src/bars';
 
 describe('AudioBars', () => {
   const audioEl = {addEventListener: jest.fn()};

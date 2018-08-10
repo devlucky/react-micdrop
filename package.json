@@ -12,6 +12,7 @@
     "lodash.sum": "^4.0.2"
   },
   "devDependencies": {
+    "@atlaskit/button": "^9.0.5",
     "ts-react-toolbox": "^0.1.15"
   },
   "engines": {
