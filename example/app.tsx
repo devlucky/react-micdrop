@@ -13,7 +13,7 @@ export interface AppState {
   dimensions: Dimensions;
 }
 
-const src = 'http://localhost:8080/example/assets/music.mp3';
+const src = '/example/assets/music.mp3';
 const repoUrl = 'https://github.com/devlucky/react-micdrop';
 
 export default class App extends Component <{}, AppState> {
