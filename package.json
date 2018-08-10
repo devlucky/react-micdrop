@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "@atlaskit/button": "^9.0.5",
-    "ts-react-toolbox": "^0.1.15"
+    "ts-react-toolbox": "^0.1.16"
   },
   "engines": {
     "node": ">=8.5.0"

@@ -7366,9 +7366,9 @@ tryer@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/tryer/-/tryer-1.0.1.tgz#f2c85406800b9b0f74c9f7465b81eaad241252f8"
 
-ts-react-toolbox@^0.1.15:
-  version "0.1.15"
-  resolved "https://registry.yarnpkg.com/ts-react-toolbox/-/ts-react-toolbox-0.1.15.tgz#04d7eff312f60a63aae2912565aa62e7563daef7"
+ts-react-toolbox@^0.1.16:
+  version "0.1.16"
+  resolved "https://registry.yarnpkg.com/ts-react-toolbox/-/ts-react-toolbox-0.1.16.tgz#b757cefdcb97c5a2d82e84169c3fd2e03909ae7c"
   dependencies:
     "@types/enzyme" "^3.1.9"
     "@types/jest" "^22.2.0"
