@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Component} from 'react';
+import {Component, ChangeEvent} from 'react';
 import {GHCorner} from 'react-gh-corner';
 import Button from '@atlaskit/button';
 import {AppWrapper, MicDropWrapper} from './styled';
@@ -33,8 +33,8 @@ export default class App extends Component <{}, AppState> {
     })
   }
 
-  changeWidth = (e) => {
-    const width = e.target.value;
+  changeWidth = (e: ChangeEvent<HTMLInputElement>) => {
+    const width = parseInt(e.target.value);
     this.setState({
       dimensions: {
         ...this.state.dimensions,
@@ -43,8 +43,8 @@ export default class App extends Component <{}, AppState> {
     })
   }
  
-  changeHeight = (e) => {
-    const height = e.target.value;
+  changeHeight = (e: ChangeEvent<HTMLInputElement>) => {
+    const height = parseInt(e.target.value);
     this.setState({
       dimensions: {
         ...this.state.dimensions,
@@ -53,13 +53,13 @@ export default class App extends Component <{}, AppState> {
     })
   }
 
-  changeBarWidth = (e) => {
-    const barWidth = e.target.value;
+  changeBarWidth = (e: ChangeEvent<HTMLInputElement>) => {
+    const barWidth = parseInt(e.target.value);
     this.setState({barWidth})
   }
 
-  changeBarNumber = (e) => {
-    const barNumber = e.target.value;
+  changeBarNumber = (e: ChangeEvent<HTMLInputElement>) => {
+    const barNumber = parseInt(e.target.value);
     this.setState({barNumber})
   }
 

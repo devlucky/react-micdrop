@@ -14,6 +14,7 @@ export interface AudioBarsProps {
 
 const maxNumBarsToDraw = 64;
 const maxByteValue = 256;
+const defaultBarNumber = 30;
 
 // TODO: Play with alpha channel based on height?
 const getFillStyle = (height: number): string => {
@@ -28,7 +29,7 @@ export class AudioBars extends Component<AudioBarsProps, {}> {
   private animationId?: number;
 
   static defaultProps: Partial<AudioBarsProps> = {
-    barNumber: 30
+    barNumber: defaultBarNumber
   }
 
   componentDidMount() {
@@ -141,7 +142,7 @@ export class AudioBars extends Component<AudioBarsProps, {}> {
   }
 
   private get barNumber(): number {
-    const {barNumber} = this.props;
+    const {barNumber = defaultBarNumber} = this.props;
     return Math.min(barNumber, maxNumBarsToDraw);
   }
 
