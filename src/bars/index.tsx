@@ -8,7 +8,6 @@ import {BarsCanvas} from './styled';
 export interface AudioBarsProps {
   analyser: Analyser;
   dimensions?: Dimensions;
-  barWidth?: number;
   barNumber?: number;
 }
 
@@ -18,8 +17,8 @@ const defaultBarNumber = 30;
 
 // TODO: Play with alpha channel based on height?
 const getFillStyle = (height: number): string => {
-  const red = Math.round(87 + (169 * height));
-
+  // const red = Math.round(87 + (169 * height));
+  const red = 130;
   return `rgba(${red}, 175, 229, 1)`;
 }
 
@@ -89,6 +88,7 @@ export class AudioBars extends Component<AudioBarsProps, {}> {
   private drawBars = (): void => {
     const {canvasContext, barWidth, width: canvasWidth, height: canvasHeight} = this;
     const {analyser} = this.props;
+
     if (!canvasContext) return;
 
     const barValues = analyser.getBucketedByteFrequencyData(maxNumBarsToDraw);
@@ -134,10 +134,8 @@ export class AudioBars extends Component<AudioBarsProps, {}> {
   }
 
   private get barWidth(): number {
-    const {barWidth} = this.props;
-    if (barWidth) { return barWidth; }
-
     const {width: canvasWidth, barNumber} = this;
+
     return canvasWidth / barNumber;
   }
 

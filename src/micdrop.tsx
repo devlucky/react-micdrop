@@ -10,7 +10,6 @@ export interface MicDropProps {
   // autoPlay?: boolean; // TODO: does this make sense or just pass isPlaying=true initially
   isPlaying?: boolean;
   loop?: boolean;
-  barWidth?: number;
   barNumber?: number;
   dimensions?: Dimensions;
 }
@@ -72,13 +71,12 @@ export class MicDrop extends Component<MicDropProps, MicDropState> {
 
   renderBars = () => {
     const {analyser} = this.state;
-    const {barWidth, barNumber, dimensions} = this.props;
+    const {barNumber, dimensions} = this.props;
     if (!analyser) return;
 
     return (
       <AudioBars 
         analyser={analyser}
-        barWidth={barWidth}
         barNumber={barNumber}
         dimensions={dimensions}
       />

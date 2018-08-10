@@ -9,7 +9,6 @@ import { Dimensions } from '../src/utils/dimensions';
 export interface AppState {
   isPlaying: boolean; 
   barNumber: number;
-  barWidth: number;
   dimensions: Dimensions;
 }
 
@@ -19,8 +18,7 @@ const repoUrl = 'https://github.com/devlucky/react-micdrop';
 export default class App extends Component <{}, AppState> {
   state: AppState = {
     isPlaying: true,
-    barNumber: 50,
-    barWidth: 10,
+    barNumber: 20,
     dimensions: {
       width: 500,
       height: 400
@@ -53,18 +51,13 @@ export default class App extends Component <{}, AppState> {
     })
   }
 
-  changeBarWidth = (e: ChangeEvent<HTMLInputElement>) => {
-    const barWidth = parseInt(e.target.value);
-    this.setState({barWidth})
-  }
-
   changeBarNumber = (e: ChangeEvent<HTMLInputElement>) => {
     const barNumber = parseInt(e.target.value);
     this.setState({barNumber})
   }
 
   render() {
-    const {isPlaying, barNumber, barWidth, dimensions} = this.state;
+    const {isPlaying, barNumber, dimensions} = this.state;
     const toggleButtonText = isPlaying ? 'pause' : 'play';
 
     return (
@@ -75,7 +68,6 @@ export default class App extends Component <{}, AppState> {
             src={src}
             isPlaying={isPlaying}
             barNumber={barNumber}
-            barWidth={barWidth}
             dimensions={dimensions}
           />
         </MicDropWrapper>
@@ -84,7 +76,6 @@ export default class App extends Component <{}, AppState> {
             {toggleButtonText}
           </Button>
           <div>
-            Bar width <input type="number" value={barWidth} onChange={this.changeBarWidth} />
             Bar number <input type="number" value={barNumber} onChange={this.changeBarNumber} />
           </div>
           <div>
