@@ -3,12 +3,16 @@ import {Component} from 'react';
 import { Analyser } from './analyser';
 import { AudioBars } from './bars';
 import { Audio } from './styled';
+import { Dimensions } from './utils/dimensions';
 
 export interface MicDropProps {
   src: string;
   // autoPlay?: boolean; // TODO: does this make sense or just pass isPlaying=true initially
   isPlaying?: boolean;
   loop?: boolean;
+  barWidth?: number;
+  barNumber?: number;
+  dimensions?: Dimensions;
 }
 
 export interface MicDropState {
@@ -68,15 +72,18 @@ export class MicDrop extends Component<MicDropProps, MicDropState> {
 
   renderBars = () => {
     const {analyser} = this.state;
+    const {barWidth, barNumber, dimensions} = this.props;
     if (!analyser) return;
 
     return (
       <AudioBars 
         analyser={analyser}
+        barWidth={barWidth}
+        barNumber={barNumber}
+        dimensions={dimensions}
       />
     )
   }
-  
 
   render() {
     const {src, loop} = this.props;

@@ -12,15 +12,9 @@ injectGlobal`
 `;
 
 export const AppWrapper = styled.div`
-
-`;
-
-export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  margin: 20px;
 `;
 
 export const VisualisationsContainer = styled.div`
@@ -36,4 +30,11 @@ export const Visualisation = styled.div`
 
 export const Audio = styled.audio`
   margin-bottom: 20px;
+`;
+
+export const MicDropWrapper = styled.div`
+  display: inline-block;
+  border: 2px solid #ccc;
+  border-radius: 3px;
+  line-height: 0;
 `;
