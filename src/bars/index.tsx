@@ -2,9 +2,8 @@ import * as React from 'react';
 import {Component} from 'react';
 
 import {Analyser} from '../analyser';
-import {Dimensions} from '../utils/dimensions';
 import {BarsCanvas} from './styled';
-import { Color } from '../domain';
+import { Color, Bar, Dimensions } from '../domain';
 
 export interface AudioBarsProps {
   analyser: Analyser;
@@ -13,15 +12,22 @@ export interface AudioBarsProps {
   color?: Color;
 }
 
+const defaultDimensions: Dimensions = {
+  width: 400,
+  height: 400
+}
 const maxNumBarsToDraw = 64;
 const maxByteValue = 256;
 const defaultBarNumber = 30;
 
-// TODO: Play with alpha channel based on height?
-const defaultFillStyle = (height: number): string => {
-  const red = Math.round(87 + (169 * height));
-  
-  return `rgba(${red}, 175, 229, 1)`;
+// TODO: add tests
+export const getBarStyle = ({height}: Bar, canvasDimensions: Dimensions): string => {
+  const percentage = height / canvasDimensions.height;
+  const red = 255 * (percentage);
+  const green = 100 * (percentage);
+  const blue = 155;
+
+  return `rgba(${red}, ${green}, ${blue}, 1)`;
 }
 
 export class AudioBars extends Component<AudioBarsProps, {}> {
@@ -30,7 +36,8 @@ export class AudioBars extends Component<AudioBarsProps, {}> {
   private animationId?: number;
 
   static defaultProps: Partial<AudioBarsProps> = {
-    barNumber: defaultBarNumber
+    barNumber: defaultBarNumber,
+    dimensions: defaultDimensions
   }
 
   componentDidMount() {
@@ -46,10 +53,11 @@ export class AudioBars extends Component<AudioBarsProps, {}> {
   }
 
   render() {
+    const {dimensions} = this.props;
     return (
-      <BarsCanvas 
-        width={this.width}
-        height={this.height}
+      <BarsCanvas
+        width={dimensions.width}
+        height={dimensions.height}
         innerRef={this.saveCanvasRef}
       />
     );
@@ -82,14 +90,15 @@ export class AudioBars extends Component<AudioBarsProps, {}> {
 
   // TODO-Perf: we can store the higher bar value XY and only clear the canvas from those points
   private clearCanvas = () => {
-    const {canvasContext, width, height} = this;
+    const {dimensions} = this.props;
+    const {canvasContext} = this;
     if (!canvasContext) return;
-    canvasContext.clearRect(0, 0, width, height);
+    canvasContext.clearRect(0, 0, dimensions.width, dimensions.height);
   }
 
   private drawBars = (): void => {
-    const {canvasContext, barWidth, width: canvasWidth, height: canvasHeight} = this;
-    const {analyser} = this.props;
+    const {canvasContext, barWidth} = this;
+    const {analyser, dimensions} = this.props;
 
     if (!canvasContext) return;
 
@@ -98,30 +107,33 @@ export class AudioBars extends Component<AudioBarsProps, {}> {
 
     for (let i = 0; i < barValues.length; i++) {
       const x = i * barWidth + i;
-      if (x >= canvasWidth) {break;} // Don't paint bars outside the canvas
+      if (x >= dimensions.width) {break;} // Don't paint bars outside the visible canvas
 
       const percentBarHeight = barValues[i] / maxByteValue;
-      const barHeight = canvasHeight * percentBarHeight;
-      
-      if (barHeight < 1) {continue;} // Don't paint invisible bars
+      const height = dimensions.height * percentBarHeight;
 
-      canvasContext.fillStyle = this.getFillStyle(percentBarHeight)
-      canvasContext.fillRect(x, canvasHeight - barHeight, barWidth, barHeight);
+      if (height < 1) {continue;} // Don't paint invisible bars
+
+      const y = dimensions.height - height;
+      const bar: Bar = {x, y, width: barWidth, height};
+
+      canvasContext.fillStyle = this.getFillStyle(bar, dimensions);
+      canvasContext.fillRect(x, y, barWidth, height);
     }
 
     this.animationId = requestAnimationFrame(this.drawBars);
   }
 
-  getFillStyle = (height: number): string => {
+  getFillStyle = (bar: Bar, canvasDimensions: Dimensions): string => {
     const {color} = this.props;
 
     if (typeof color === 'function') {
-      return color(height);
+      return color(bar, canvasDimensions);
     } else if (typeof color === 'string') {
       return color;
     }
 
-    return defaultFillStyle(height);
+    return getBarStyle(bar, canvasDimensions);
   }
 
   private onPause = () => {
@@ -136,36 +148,15 @@ export class AudioBars extends Component<AudioBarsProps, {}> {
     this.animationId && cancelAnimationFrame(this.animationId);
   }
 
-  private get width(): number {
-    const defaultWidth = 400;
-    const {dimensions} = this.props;
-
-    if (!dimensions || !dimensions.width) {
-      return defaultWidth;
-    }
-
-    return dimensions.width;
-  }
-
   private get barWidth(): number {
-    const {width: canvasWidth, barNumber} = this;
+    const {dimensions} = this.props;
+    const {barNumber} = this;
 
-    return canvasWidth / barNumber;
+    return dimensions.width / barNumber;
   }
 
   private get barNumber(): number {
     const {barNumber = defaultBarNumber} = this.props;
     return Math.min(barNumber, maxNumBarsToDraw);
-  }
-
-  private get height(): number {
-    const defaultHeight = 400;
-    const {dimensions} = this.props;
-
-    if (!dimensions || !dimensions.height) {
-      return defaultHeight;
-    }
-
-    return dimensions.height;
   }
 }

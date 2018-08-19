@@ -4,10 +4,10 @@ import {GHCorner} from 'react-gh-corner';
 import Button from '@atlaskit/button';
 import {AppWrapper, MicDropWrapper} from './styled';
 import { MicDrop } from '../src';
-import { Dimensions } from '../src/utils/dimensions';
+import { Dimensions } from '../src/domain';
 
 export interface AppState {
-  isPlaying: boolean; 
+  isPlaying: boolean;
   barNumber: number;
   dimensions: Dimensions;
   color?: string;
@@ -19,7 +19,7 @@ const repoUrl = 'https://github.com/devlucky/react-micdrop';
 export default class App extends Component <{}, AppState> {
   state: AppState = {
     isPlaying: true,
-    barNumber: 20,
+    barNumber: 30,
     dimensions: {
       width: 500,
       height: 400
@@ -41,7 +41,7 @@ export default class App extends Component <{}, AppState> {
       }
     })
   }
- 
+
   changeHeight = (e: ChangeEvent<HTMLInputElement>) => {
     const height = parseInt(e.target.value);
     this.setState({
@@ -59,7 +59,7 @@ export default class App extends Component <{}, AppState> {
 
   changeColor = (e: ChangeEvent<HTMLInputElement>) => {
     const color = e.target.value;
-    
+
     this.setState({
       color
     });
@@ -93,7 +93,7 @@ export default class App extends Component <{}, AppState> {
           </div>
           <div>
             Dimensions
-            <input type="number" value={dimensions.width} onChange={this.changeWidth} /> x 
+            <input type="number" value={dimensions.width} onChange={this.changeWidth} /> x
             <input type="number" value={dimensions.height} onChange={this.changeHeight} />
           </div>
         </div>
