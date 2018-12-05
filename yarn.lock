@@ -6466,6 +6466,11 @@ react-transition-group@^2.2.1:
     prop-types "^15.6.2"
     react-lifecycles-compat "^3.0.4"
 
+react-video-renderer@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/react-video-renderer/-/react-video-renderer-2.3.1.tgz#6732e23623bd6481d7a0f382395c8910963d8ed0"
+  integrity sha512-d3zgn8gElZFNJ0ZIqAQabpt7cn2RAqbCVVFs7xxEEx+UKL++QgL2jgH19b8Q71zchYSETtE5NI2nJtcb8QZeeg==
+
 react@^16.3.0:
   version "16.6.3"
   resolved "https://registry.yarnpkg.com/react/-/react-16.6.3.tgz#25d77c91911d6bbdd23db41e70fb094cc1e0871c"

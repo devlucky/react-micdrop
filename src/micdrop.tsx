@@ -27,9 +27,10 @@ export class MicDrop extends Component<MicDropProps, MicDropState> {
 
   }
 
-  static defaultProps: Partial<MicDropProps> = {
+  static defaultProps = {
     isPlaying: false,
-    loop: false
+    loop: false,
+    src: ''
   }
 
   componentWillReceiveProps(nextProps: MicDropProps) {
@@ -85,16 +86,24 @@ export class MicDrop extends Component<MicDropProps, MicDropState> {
     )
   }
 
+  renderAudioElement = (src: string) => {
+    const {loop} = this.props;
+
+    return (
+      <Audio
+        src={src}
+        loop={loop}
+        innerRef={this.getAudioElement}
+      />
+    );
+  }
+
   render() {
-    const {src, loop} = this.props;
+    const {src} = this.props;
 
     return (
       <div>
-        <Audio
-          src={src}
-          loop={loop}
-          innerRef={this.getAudioElement}
-        />
+        {this.renderAudioElement(src)}
         {this.renderBars()}
       </div>
     );
