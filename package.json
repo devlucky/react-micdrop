@@ -2,8 +2,11 @@
   "name": "react-micdrop",
   "version": "0.1.1",
   "description": "Audio visualisation library for React",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "repository": "https://github.com/devlucky/react-micdrop",
+  "main": "dist/es5/index.js",
+  "jsnext:main": "dist/es2015/index.js",
+  "module": "dist/es2015/index.js",
+  "types": "dist/es5/index.d.ts",
   "dependencies": {
     "@types/jest": "^19.2.3",
     "@types/lodash.chunk": "^4.2.2",
@@ -13,7 +16,7 @@
   },
   "devDependencies": {
     "@atlaskit/button": "^9.0.5",
-    "ts-react-toolbox": "^0.1.16"
+    "ts-react-toolbox": "^0.2.2"
   },
   "engines": {
     "node": ">=8.5.0"
@@ -41,6 +44,5 @@
   "files": [
     "dist"
   ],
-  "keywords": [],
-  "repository": "https://github.com/devlucky/react-micdrop"
+  "keywords": []
 }
