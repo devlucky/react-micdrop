@@ -53,11 +53,11 @@ export class AudioBars extends Component<AudioBarsProps, {}> {
   }
 
   render() {
-    const {dimensions} = this.props;
+    const {width, height} = this.props.dimensions || defaultDimensions;
     return (
       <BarsCanvas
-        width={dimensions.width}
-        height={dimensions.height}
+        width={width}
+        height={height}
         innerRef={this.saveCanvasRef}
       />
     );
@@ -90,16 +90,16 @@ export class AudioBars extends Component<AudioBarsProps, {}> {
 
   // TODO-Perf: we can store the higher bar value XY and only clear the canvas from those points
   private clearCanvas = () => {
-    const {dimensions} = this.props;
+    const {width, height} = this.props.dimensions || defaultDimensions;
     const {canvasContext} = this;
     if (!canvasContext) return;
-    canvasContext.clearRect(0, 0, dimensions.width, dimensions.height);
+    canvasContext.clearRect(0, 0, width, height);
   }
 
   private drawBars = (): void => {
     const {canvasContext, barWidth} = this;
-    const {analyser, dimensions} = this.props;
-
+    const {analyser} = this.props;
+    const dimensions = this.props.dimensions || defaultDimensions;
     if (!canvasContext) return;
 
     const barValues = analyser.getBucketedByteFrequencyData(maxNumBarsToDraw);
@@ -149,10 +149,10 @@ export class AudioBars extends Component<AudioBarsProps, {}> {
   }
 
   private get barWidth(): number {
-    const {dimensions} = this.props;
+    const {width} = this.props.dimensions || defaultDimensions;
     const {barNumber} = this;
 
-    return dimensions.width / barNumber;
+    return width / barNumber;
   }
 
   private get barNumber(): number {
