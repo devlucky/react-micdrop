@@ -3,7 +3,7 @@ import {Component, ChangeEvent} from 'react';
 import {GHCorner} from 'react-gh-corner';
 import Button from '@atlaskit/button';
 import {AppWrapper, MicDropWrapper} from './styled';
-import { MicDrop } from '../src';
+import MicDrop from '../src';
 import { Dimensions } from '../src/domain';
 
 export interface AppState {
