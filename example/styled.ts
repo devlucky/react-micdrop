@@ -38,3 +38,10 @@ export const MicDropWrapper = styled.div`
   border-radius: 3px;
   line-height: 0;
 `;
+
+export const MicDropsWrapper = styled.div`
+  display: flex;
+  justify-content: space-around;
+  width: 1100px;
+  margin-bottom: 10px;
+`;
