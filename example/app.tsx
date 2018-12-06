@@ -2,8 +2,9 @@ import * as React from 'react';
 import {Component, ChangeEvent} from 'react';
 import {GHCorner} from 'react-gh-corner';
 import Button from '@atlaskit/button';
-import {AppWrapper, MicDropWrapper} from './styled';
-import MicDrop from '../src';
+import VideoRenderer from 'react-video-renderer';
+import {AppWrapper, MicDropWrapper, MicDropsWrapper} from './styled';
+import MicDrop, { MicDropFromRef } from '../src';
 import { Dimensions } from '../src/domain';
 
 export interface AppState {
@@ -18,7 +19,7 @@ const repoUrl = 'https://github.com/devlucky/react-micdrop';
 
 export default class App extends Component <{}, AppState> {
   state: AppState = {
-    isPlaying: true,
+    isPlaying: false,
     barNumber: 30,
     dimensions: {
       width: 500,
@@ -72,15 +73,36 @@ export default class App extends Component <{}, AppState> {
     return (
       <AppWrapper>
         <GHCorner openInNewTab href={repoUrl} />
-        <MicDropWrapper>
-          <MicDrop
-            src={src}
-            isPlaying={isPlaying}
-            barNumber={barNumber}
-            dimensions={dimensions}
-            color={color}
-          />
-        </MicDropWrapper>
+        <MicDropsWrapper>
+          <MicDropWrapper>
+            <MicDrop
+              src={src}
+              isPlaying={isPlaying}
+              barNumber={barNumber}
+              dimensions={dimensions}
+              color={color}
+            />
+          </MicDropWrapper>
+          <MicDropWrapper>
+            <VideoRenderer sourceType="audio" src={src}>
+              {(audio, _, actions, audioRef) => {
+                return (
+                  <div>
+                    {audio}
+                    <MicDropFromRef
+                      audioRef={audioRef}
+                      barNumber={barNumber}
+                      dimensions={dimensions}
+                      color={color}
+                    />
+                    <button onClick={actions.play}>Play</button>
+                    <button onClick={actions.pause}>Pause</button>
+                  </div>
+                )
+              }}
+            </VideoRenderer>
+          </MicDropWrapper>
+        </MicDropsWrapper>
         <div>
           <Button shouldFitContainer appearance="primary" onClick={this.togglePlay}>
             {toggleButtonText}
